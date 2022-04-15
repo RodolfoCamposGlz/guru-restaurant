@@ -1,0 +1,12 @@
+.card {
+    &--wrapper {
+        max-height: 120px;
+        cursor: pointer;
+        background-color: white;
+        margin-bottom: 20px;
+    }
+    &--business-image {
+        max-height: 40px;
+        max-width: 40px;
+    }
+}
