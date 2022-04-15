@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState, useMemo, useCallback } from 'react'; 
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -8,7 +8,7 @@ import Card from '../components/Card/Card';
 import Link from 'next/link'
 import { createStore } from 'redux';
 import { useSelector, useDispatch } from 'react-redux'
-import { searchBussiness } from '../store/slices/businessSlice';
+import { searchBussiness, viewedBusiness } from '../store/slices/businessSlice';
 
 
 
@@ -30,20 +30,36 @@ const _LOCATION = 'leon guanajuato';
 const _LIMIT = 10;
 
 export default function Home() {
-  const { search }  = useSelector(state=> state.business);
+  const { search, viewed }  = useSelector(state=> state.business);
   const dispatch = useDispatch();
-  // const { loading:getOrgLoading, error, data,} = useQuery(GET_SEARCH, {
-  //   variables: { term: search, location:_LOCATION, limit: _LIMIT},
-  //   fetchPolicy: 'cache-and-network',
-  //   // onCompleted(data){
-  //   //   console.log("DATA", data)
-  //   // },
-  // });
+  const { loading:getOrgLoading, error, data,} = useQuery(GET_SEARCH, {
+    variables: { term: search, location:_LOCATION, limit: _LIMIT},
+    fetchPolicy: 'cache-and-network',
+    // onCompleted(data){
+    //   console.log("DATA", data)
+    // },
+  });
 
   const onSearch =(event) => {
         dispatch(searchBussiness(event.target.value))
   }
 
+  const onClickBusiness = (business) => {
+    const obj = {}
+    if(obj[business.id]) return;
+    console.log("here");
+    obj[business.id] = business.alias;
+    dispatch(viewedBusiness(obj));
+  }
+
+  const isBusinessViewed = useCallback((id) => {
+    console.log("VIEWED", viewed[id])
+    if(viewed[id]) return true;
+    return false;
+  },[viewed])
+
+  console.log("data", data);
+  console.log("viewed", viewed)
   return (
     <div>
 
@@ -54,16 +70,15 @@ export default function Home() {
       </Head>
 
       <main className="home-container">
-        <input  className='input' type="text" name="name" onChange={onSearch} />
-        <button onClick={()=> dispatch(increment())}>INCREMENT</button>
-        <button onClick={()=> dispatch(decrement())}>DECREMENT</button>
-        <button onClick={()=> dispatch(incrementByAmount(33))}>INCREMENT BY 33</button>
+        <input value={search} className='input' type="text" name="name" onChange={onSearch} />
+        <button onClick={()=> dispatch(viewedBusiness({'test2': 'valuet'}))}>ADD VALUE</button>
+        <button onClick={()=> dispatch(viewedBusiness({'test2': 'value2'}))}>ADD VALUE2</button>
         {/* <div>COUNT: {count}</div> */}
-        {/* {data?.search?.business?.map((business, index)=> {
+        {data?.search?.business?.map((business, index)=> {
           return(
-            <Card key={index} business={business} />
+            <Card isViewed={() => isBusinessViewed(business.id)} onClick={() => onClickBusiness(business)} key={index} business={business} />
           )
-        })} */}
+        })}
         {/* <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
