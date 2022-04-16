@@ -1,14 +1,35 @@
 //COLORES
-$color-primary: #7ed56f;
-$color-primary-light:#55c57a;
-$color-primary-dark:#28b485;
-
-$color-grey-dark:#777;
-$color-white: #fff;
+$color-primary: rgb(9, 71, 121);
+$color-secondary:rgb(255, 179, 0);
 $color-black: #000;
+$color-white: #fff;
+$color-gradient-brand: linear-gradient(90deg, rgba(9,71,121,1) 0%, rgba(9,71,121,1) 35%, rgba(255,179,0,1) 100%);
 
 
 //GRID
 $grid-width: 114rem;
 $gutter-vertical: 8rem;
 $gutter-horizontal: 6rem;
+
+//SHADOW
+$shadow-primary: 0 8px 13px #000, 0 18px 23px #000;
+
+// $breakpoints: (
+//   sm: 576px,
+//   md: 768px,
+//   lg: 992px,
+//   xl: 1200px
+// );
+
+
+// Small tablets and large smartphones (landscape view)
+$screen-sm-min: 576px;
+
+// Small tablets (portrait view)
+$screen-md-min: 768px;
+
+// Tablets and small desktops
+$screen-lg-min: 992px;
+
+// Large tablets and desktops
+$screen-xl-min: 1200px;

@@ -1,4 +1,37 @@
-.home-container {
-    background: linear-gradient(90deg, rgba(9,71,121,1) 0%, rgba(9,71,121,1) 35%, rgba(255,179,0,1) 100%);
-    min-height: 100vh;
+.home {
+    &--container {
+        background: $color-gradient-brand;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        @include sm {
+            padding: 16px;
+        }
+    }
+    &--search-input-container {
+        display: flex;
+        flex-direction: column;
+        margin-top: 12%;
+        margin-bottom: 24px;
+    }
+    &--title {
+        font-size: 32px;
+        color: white;
+        text-shadow: $shadow-primary;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+    &--content {
+        display: flex;
+        justify-content: center;
+        max-width: 680px;
+        svg {
+            margin-top: 80px;
+        }
+        ul li{
+            list-style-type: none;
+          }
+    }
+
 }

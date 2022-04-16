@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react'; 
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'; 
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { createStore } from 'redux';
 import { useSelector, useDispatch } from 'react-redux'
 import { searchBussiness, viewedBusiness } from '../store/slices/businessSlice';
+import ReactLoading from 'react-loading';
 
 
 
@@ -31,35 +32,40 @@ const _LIMIT = 10;
 
 export default function Home() {
   const { search, viewed }  = useSelector(state=> state.business);
+  const [searchWord, setSearchedWord] = useState(search);
   const dispatch = useDispatch();
-  const { loading:getOrgLoading, error, data,} = useQuery(GET_SEARCH, {
+  const didMountSearch = useRef(false);
+  const { loading, error, data,} = useQuery(GET_SEARCH, {
     variables: { term: search, location:_LOCATION, limit: _LIMIT},
-    fetchPolicy: 'cache-and-network',
-    // onCompleted(data){
-    //   console.log("DATA", data)
-    // },
+    fetchPolicy: 'cache',
   });
 
-  const onSearch =(event) => {
-        dispatch(searchBussiness(event.target.value))
+  const onSearchWord =(event) => {
+        setSearchedWord(event.target.value);
   }
+
+  useEffect(() => {
+    if (didMountSearch.current) {
+      const delayDebounceFn = setTimeout(() => {
+        console.log("DISPATCHED")
+        dispatch(searchBussiness(searchWord))
+      }, 1000);
+      return () => clearTimeout(delayDebounceFn);
+    } else didMountSearch.current = true;
+  }, [searchWord]);
 
   const onClickBusiness = (business) => {
     const obj = {}
     if(obj[business.id]) return;
-    console.log("here");
     obj[business.id] = business.alias;
     dispatch(viewedBusiness(obj));
   }
 
   const isBusinessViewed = useCallback((id) => {
-    console.log("VIEWED", viewed[id])
     if(viewed[id]) return true;
     return false;
   },[viewed])
 
-  console.log("data", data);
-  console.log("viewed", viewed)
   return (
     <div>
 
@@ -69,16 +75,36 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="home-container">
-        <input value={search} className='input' type="text" name="name" onChange={onSearch} />
-        <button onClick={()=> dispatch(viewedBusiness({'test2': 'valuet'}))}>ADD VALUE</button>
-        <button onClick={()=> dispatch(viewedBusiness({'test2': 'value2'}))}>ADD VALUE2</button>
+      <main className="home--container">
+        <div className='home--search-input-container'>
+          <h1 className='home--title'>Encuentra tu restaurante favorito!</h1>
+          <input placeholder='Escribe el nombre del restaurante' value={searchWord} className='input' type="text" name="search" onChange={onSearchWord} />
+        </div>
+          {search !== '' ? (
+              <div className='home--content'>
+              {
+                loading ? (
+                  <ReactLoading type={'spin'} color={'white'} height={20} width={20} />
+                )
+                : (
+                  <ul>
+                  {data?.search?.business?.map((business, index)=> {
+                    return(
+                      <li  key={index}>
+                        <Card isViewed={() => isBusinessViewed(business.id)} onClick={() => onClickBusiness(business)} business={business} />
+                      </li>
+                    )
+                  })}
+                  </ul>
+                )
+              }
+              </div>
+          ) : (
+            null
+          )}
+
         {/* <div>COUNT: {count}</div> */}
-        {data?.search?.business?.map((business, index)=> {
-          return(
-            <Card isViewed={() => isBusinessViewed(business.id)} onClick={() => onClickBusiness(business)} key={index} business={business} />
-          )
-        })}
+      
         {/* <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
