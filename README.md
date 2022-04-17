@@ -10,6 +10,8 @@ npm run dev
 yarn dev
 ```
 
+In case of having problems fetching the server please go to: https://cors-anywhere.herokuapp.com/corsdemo and request temporary access
+
 Project made by Rodolfo Campos.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
