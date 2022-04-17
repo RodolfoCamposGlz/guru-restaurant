@@ -1,0 +1,15 @@
+.business-section {
+    &--wrapper {
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid $color-primary;
+        padding: 24px 20px;
+    }
+    &--content-container {
+        display: flex;
+    }
+    &--title {
+        font-size: 28px;
+        color: $color-black;
+    }
+}

@@ -11,7 +11,6 @@ export const businessSlice = createSlice({
        state.search = action.payload
     },
     viewedBusiness: (state, action) => {
-      console.log("state", state.viewed)
        state.viewed = {...state.viewed, ...action.payload}
     }
   }

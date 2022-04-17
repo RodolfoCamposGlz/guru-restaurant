@@ -13,10 +13,7 @@ gql`
             photos
             rating
             display_phone
-            reviews {
-                id
-                rating
-            }
+            review_count
             location {
                 address1
                 address2
@@ -40,12 +37,39 @@ gql`
             id
             is_claimed
             is_closed
+            name
             url
             phone
             display_phone
             review_count
             rating
             photos
+            price
+            hours {
+                open {
+                    end
+                    start
+                    day
+                }
+                hours_type
+                is_open_now
+            }
+            location {
+                address1
+                address2
+                address3
+                city
+                state
+                postal_code
+                country
+                formatted_address
+            }
+            reviews {
+                user {
+                    name
+                }
+                text
+            }
 
         }
          }

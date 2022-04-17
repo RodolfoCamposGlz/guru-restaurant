@@ -10,22 +10,8 @@ import { createStore } from 'redux';
 import { useSelector, useDispatch } from 'react-redux'
 import { searchBussiness, viewedBusiness } from '../store/slices/businessSlice';
 import ReactLoading from 'react-loading';
+import Input from '../components/Input/Input';
 
-
-
-
-// const GET_ORGANIZATION = 
-// gql`
-//     query business {
-//       business(id: "garaje-san-francisco") {
-//         name
-//         id
-//         alias
-//         rating
-//         url
-//       }
-//     }
-// `;
 
 const _LOCATION = 'leon guanajuato';
 const _LIMIT = 10;
@@ -47,7 +33,6 @@ export default function Home() {
   useEffect(() => {
     if (didMountSearch.current) {
       const delayDebounceFn = setTimeout(() => {
-        console.log("DISPATCHED")
         dispatch(searchBussiness(searchWord))
       }, 1000);
       return () => clearTimeout(delayDebounceFn);
@@ -78,12 +63,12 @@ export default function Home() {
       <main className="home--container">
         <div className='home--search-input-container'>
           <h1 className='home--title'>Encuentra tu restaurante favorito!</h1>
-          <input placeholder='Escribe el nombre del restaurante' value={searchWord} className='input' type="text" name="search" onChange={onSearchWord} />
+          <Input placeholder='Escribe el nombre del restaurante' value={searchWord} onChange={onSearchWord}/>
         </div>
           {search !== '' ? (
               <div className='home--content'>
               {
-                loading ? (
+                loading && !data ? (
                   <ReactLoading type={'spin'} color={'white'} height={20} width={20} />
                 )
                 : (
@@ -102,61 +87,7 @@ export default function Home() {
           ) : (
             null
           )}
-
-        {/* <div>COUNT: {count}</div> */}
-      
-        {/* <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div> */}
       </main>
-
-      {/* <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer> */}
     </div>
   )
 }

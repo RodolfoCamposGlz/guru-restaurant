@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-    uri: 'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/graphql'
+    uri: process.env.NEXT_PUBLIC_URL_SERVER
   });
 
 const authLink = setContext((_, { headers }) => {
@@ -17,5 +17,4 @@ const authLink = setContext((_, { headers }) => {
  export const client = new ApolloClient({
     link: authLink.concat(httpLink),
     cache: new InMemoryCache(),
-  
   });
